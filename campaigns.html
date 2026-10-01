@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head><title>Campaigns</title><style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#172033}
+header{background:#1e3a8a;color:white;padding:24px 40px}
+header h1{margin:0 0 6px}
+.top{background:white;padding:14px 40px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 7px #0001}
+nav{padding:18px 40px;background:white;border-bottom:1px solid #ddd}
+nav a{margin-right:18px;text-decoration:none;font-weight:bold;color:#2563eb}
+.container{padding:25px 40px}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.card{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #00000012}
+.card h2{font-size:30px;margin:8px 0;color:#2563eb}
+.box{background:white;padding:22px;border-radius:12px;margin-bottom:20px;box-shadow:0 3px 12px #00000012}
+input,select,textarea{padding:10px;margin:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button,.btn{border:0;border-radius:6px;padding:10px 15px;background:#2563eb;color:white;text-decoration:none;cursor:pointer}
+.danger{background:#dc2626}.success{background:#16a34a}.muted{color:#667085}
+table{width:100%;border-collapse:collapse;background:white}
+th,td{padding:12px;border:1px solid #e5e7eb;text-align:left}
+th{background:#2563eb;color:white}
+.flash{padding:12px;border-radius:7px;margin-bottom:15px;background:#dcfce7;color:#166534}
+.flash.error{background:#fee2e2;color:#991b1b}
+.actions a{margin-right:8px}
+</style></head>
+<body><header><h1>Email Campaigns</h1><p>Create and manage marketing campaigns</p></header>
+<div class="top"><b>👤 {{ session['username'] }}</b><a class="btn danger" href="/logout">Logout</a></div>
+<nav><a href="/">Dashboard</a><a href="/leads">Leads</a><a href="/campaigns">Campaigns</a><a href="/segments">Segments</a><a href="/analytics">Analytics</a></nav>
+<div class="container">
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+<div class="box"><h2>Create Campaign</h2><form method="POST" action="/add-campaign">
+<input name="name" placeholder="Campaign Name" required><input name="subject" placeholder="Email Subject" required>
+<br><textarea name="message" rows="5" cols="70" placeholder="Campaign message" required></textarea><br><button>Create Campaign</button></form></div>
+<div class="box"><h2>Campaign List</h2>{% if campaigns %}<table><tr><th>ID</th><th>Name</th><th>Subject</th><th>Status</th><th>Created</th><th>Actions</th></tr>
+{% for c in campaigns %}<tr><td>{{ c['id'] }}</td><td>{{ c['name'] }}</td><td>{{ c['subject'] }}</td><td>{{ c['status'] }}</td><td>{{ c['created_at'] }}</td>
+<td>{% if c['status'] != 'Sent' %}<a class="btn success" href="/send-campaign/{{ c['id'] }}" onclick="return confirm('Mark campaign as Sent?')">Send</a>{% endif %}
+<a class="btn danger" href="/delete-campaign/{{ c['id'] }}" onclick="return confirm('Delete this campaign?')">Delete</a></td></tr>{% endfor %}</table>
+{% else %}<p class="muted">No campaigns created yet.</p>{% endif %}</div></div></body></html>

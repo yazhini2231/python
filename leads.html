@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html><head><title>Leads</title><style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#172033}
+header{background:#1e3a8a;color:white;padding:24px 40px}
+header h1{margin:0 0 6px}
+.top{background:white;padding:14px 40px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 7px #0001}
+nav{padding:18px 40px;background:white;border-bottom:1px solid #ddd}
+nav a{margin-right:18px;text-decoration:none;font-weight:bold;color:#2563eb}
+.container{padding:25px 40px}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.card{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #00000012}
+.card h2{font-size:30px;margin:8px 0;color:#2563eb}
+.box{background:white;padding:22px;border-radius:12px;margin-bottom:20px;box-shadow:0 3px 12px #00000012}
+input,select,textarea{padding:10px;margin:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button,.btn{border:0;border-radius:6px;padding:10px 15px;background:#2563eb;color:white;text-decoration:none;cursor:pointer}
+.danger{background:#dc2626}.success{background:#16a34a}.muted{color:#667085}
+table{width:100%;border-collapse:collapse;background:white}
+th,td{padding:12px;border:1px solid #e5e7eb;text-align:left}
+th{background:#2563eb;color:white}
+.flash{padding:12px;border-radius:7px;margin-bottom:15px;background:#dcfce7;color:#166534}
+.flash.error{background:#fee2e2;color:#991b1b}
+.actions a{margin-right:8px}
+</style></head>
+<body><header><h1>Lead Management</h1><p>Add, edit, nurture and manage marketing leads</p></header>
+<div class="top"><b>👤 {{ session['username'] }}</b><a class="btn danger" href="/logout">Logout</a></div>
+<nav><a href="/">Dashboard</a><a href="/leads">Leads</a><a href="/campaigns">Campaigns</a><a href="/segments">Segments</a><a href="/analytics">Analytics</a></nav>
+<div class="container">
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+<div class="box"><h2>Add New Lead</h2><form method="POST" action="/add-lead">
+<input name="name" placeholder="Lead Name" required><input type="email" name="email" placeholder="Email" required>
+<input name="phone" placeholder="Phone"><select name="status"><option>New</option><option>Contacted</option><option>Qualified</option><option>Converted</option></select>
+<button>Add Lead</button></form></div>
+<div class="box"><h2>Lead List</h2>{% if leads %}<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Actions</th></tr>
+{% for lead in leads %}<tr><td>{{ lead['id'] }}</td><td>{{ lead['name'] }}</td><td>{{ lead['email'] }}</td><td>{{ lead['phone'] }}</td><td>{{ lead['status'] }}</td>
+<td class="actions"><a class="btn" href="/edit-lead/{{ lead['id'] }}">Edit</a>
+<a class="btn success" href="/nurture-lead/{{ lead['id'] }}">Nurture</a>
+<a class="btn danger" href="/delete-lead/{{ lead['id'] }}" onclick="return confirm('Delete this lead?')">Delete</a></td></tr>{% endfor %}
+</table>{% else %}<p class="muted">No leads available.</p>{% endif %}</div></div></body></html>

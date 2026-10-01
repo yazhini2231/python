@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><title>Admin Login</title><style>
+body{margin:0;font-family:Arial;background:linear-gradient(135deg,#2563eb,#7c3aed);height:100vh;display:flex;align-items:center;justify-content:center}
+.box{background:white;width:350px;padding:35px;border-radius:15px;box-shadow:0 15px 40px #0004}
+h1{text-align:center}.sub{text-align:center;color:#667085}
+input{width:100%;padding:12px;margin:8px 0;box-sizing:border-box;border:1px solid #ccc;border-radius:7px}
+button{width:100%;padding:12px;background:#2563eb;color:white;border:0;border-radius:7px;margin-top:10px}
+.error{color:#dc2626;text-align:center}
+.info{text-align:center;color:#777;font-size:13px;margin-top:20px}
+</style></head><body><div class="box">
+<h1>Marketing Automation</h1><p class="sub">Admin Login</p>
+<form method="POST"><input name="username" placeholder="Username" required>
+<input type="password" name="password" placeholder="Password" required>
+<button>Login</button></form>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<p class="info">Demo: admin / admin123</p>
+</div></body></html>
